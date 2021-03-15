@@ -1,9 +1,14 @@
 /* global $, JitsiMeetJS */
 
-var subdomain = "";
-if (subdomain) {
-    subdomain = subdomain.substr(0,subdomain.length-1).split('.').join('_').toLowerCase() + '.';
-}
+var subdomain = window.location.href || "";
+$(document).ready(() => {
+    if (subdomain) {
+        $('#head-title').html(subdomain?subdomain:"Not ye assigned")
+        subdomain = subdomain.substr(0,subdomain.length).split('.').join('_').toLowerCase() + '.';
+        console.log("loggg::::::::::::", subdomain)
+    }
+})
+
 const options = {
     hosts: {
         domain: 'beta.meet.jit.si',
@@ -48,10 +53,10 @@ function onLocalTracks(tracks) {
                 console.log(
                     `track audio output device was changed to ${deviceId}`));
         if (localTracks[i].getType() === 'video') {
-            $('#video-div').append(`<video autoplay='1' class='video-frame' id='localVideo${i}' />`);
+            $('.vdiv-1').append(`<video autoplay='1' style="width: 100%" class='video-frame' id='localVideo${i}' />`);
             localTracks[i].attach($(`#localVideo${i}`)[0]);
         } else {
-            $('#video-div').append(
+            $('.vdiv-1').append(
                 `<audio autoplay='1' muted='true' id='localAudio${i}' />`);
             localTracks[i].attach($(`#localAudio${i}`)[0]);
         }
@@ -92,10 +97,10 @@ function onRemoteTrack(track) {
     const id = participant + track.getType() + idx;
 
     if (track.getType() === 'video') {
-        $('body').append(
-            `<video autoplay='1' id='${participant}video${idx}' />`);
+        $('.vdiv-2').append(
+            `<video autoplay='1' class="remote-video" id='${participant}video${idx}' />`);
     } else {
-        $('body').append(
+        $('.vdiv-2').append(
             `<audio autoplay='1' id='${participant}audio${idx}' />`);
     }
     track.attach($(`#${id}`)[0]);
@@ -288,3 +293,4 @@ if (JitsiMeetJS.mediaDevices.isDeviceChangeAvailable('output')) {
         }
     });
 }
+
